@@ -1,0 +1,31 @@
+{
+    "name": "mpietrucha/disclosure",
+    "license": "MIT",
+    "description": "The disclosure package.",
+    "type": "liblary",
+    "authors": [
+        {
+            "name": "Michał Pietrucha",
+            "email": "michal.pietrucha@off-site.pl"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Mpietrucha\\Support\\Disclosure\\": "src"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.30",
+        "spatie/invade": "^2.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.2"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
