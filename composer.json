@@ -12,8 +12,8 @@
     "require": {
         "php": "^8.2",
         "illuminate/support": "^10.30",
-        "mpietrucha/exception": "^0.1.1",
-        "mpietrucha/utility": "^0.1.1",
+        "mpietrucha/exception": "dev-main",
+        "mpietrucha/utility": "dev-main",
         "spatie/invade": "^2.0"
     },
     "require-dev": {
