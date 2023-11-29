@@ -11,12 +11,11 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^10.30",
-        "mpietrucha/exception": "dev-main",
-        "mpietrucha/utility": "dev-main",
+        "illuminate/support": "^10.33",
         "spatie/invade": "^2.0"
     },
     "require-dev": {
+        "laravel/pint": "^1.13",
         "symfony/var-dumper": "^6.2"
     },
     "autoload": {

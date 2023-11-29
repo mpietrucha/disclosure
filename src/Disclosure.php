@@ -4,13 +4,9 @@ namespace Mpietrucha\Support\Disclosure;
 
 use Closure;
 use Spatie\Invade\Invader;
-use Mpietrucha\Support\Concerns\Factoryable;
-use Mpietrucha\Support\Exception\InvalidArgumentException;
 
 class Disclosure
 {
-    use Factoryable;
-
     protected Invader $source;
 
     protected ?Closure $transformer = null;
@@ -22,12 +18,12 @@ class Disclosure
 
     public function __set(string $name, mixed $value): void
     {
-        $this->source->$name = self::normalize($value, function (mixed $response) use ($name, $value): mixed {
+        $this->source->$name = self::normalize($value, function (mixed $response) use ($name) {
+            $response = with($response, $this->transformer);
+
             $this->source->$name = $response;
 
-            $this->source->$name = $value;
-
-            return with($response, $this->transformer);
+            return $this->source->$name;
         });
     }
 
@@ -55,12 +51,10 @@ class Disclosure
             return $response($value);
         }
 
-        return function (mixed ...$arguments) use ($value, $response): mixed {
-            $value = value($value, ...$arguments);
-
-            InvalidArgumentException::create()->when(function () use ($value) {
-                return $value instanceof Closure;
-            })->throw('Nested closures are not allowed in disclosure.');
+        return function (mixed ...$arguments) use ($value, $response) {
+            do {
+                $value = Argument::value($value, $arguments);
+            } while ($value instanceof Closure);
 
             return $response($value);
         };

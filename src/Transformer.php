@@ -10,6 +10,6 @@ class Transformer
 
     public static function boolean(mixed $response, bool $mode = true): bool
     {
-        return !! $response === $mode;
+        return (bool) $response === $mode;
     }
 }
