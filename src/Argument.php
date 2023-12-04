@@ -11,6 +11,11 @@ class Argument implements ArgumentInterface
     {
     }
 
+    public function __invoke(): mixed
+    {
+        return $this->get();
+    }
+
     public static function value(mixed $value, array $arguments = []): mixed
     {
         if ($value instanceof ArgumentInterface) {
