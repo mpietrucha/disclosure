@@ -3,11 +3,13 @@
 namespace Mpietrucha\Support\Disclosure;
 
 use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Mpietrucha\Support\Disclosure\Contracts\ArgumentInterface;
 
 class Argument implements ArgumentInterface
 {
-    public function __construct(protected mixed $value, protected array $arguments = [])
+    public function __construct(protected mixed $value, protected array $arguments)
     {
     }
 
@@ -16,19 +18,25 @@ class Argument implements ArgumentInterface
         return $this->get();
     }
 
-    public static function value(mixed $value, array $arguments = []): mixed
+    public static function value(mixed $value, array $arguments): mixed
     {
-        if ($value instanceof ArgumentInterface) {
-            return $value->get();
-        }
+        return collect([$value, ...$arguments])->lazy()->map(function (mixed $value) {
+            if ($value instanceof ArgumentInterface) {
+                return $value->get();
+            }
 
-        if (! $value instanceof Closure) {
             return $value;
-        }
+        })->pipe(function (LazyCollection $arguments) {
+            $value = $arguments->first();
 
-        return $value(...collect($arguments)->map(function (mixed $value) {
-            return self::value($value);
-        }));
+            if (! $value instanceof Closure) {
+                return $value;
+            }
+
+            return $value(...$arguments->collect()->tap(function (Collection $arguments) {
+                $arguments->shift();
+            }));
+        });
     }
 
     public function get(): mixed
